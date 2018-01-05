@@ -1,0 +1,3 @@
+ec2_basic:
+  state: "{{state | default('present')}}"
+  instance_ids: "{{ instance_ids | default([])}}"
