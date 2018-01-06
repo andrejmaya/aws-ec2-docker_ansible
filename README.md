@@ -3,16 +3,18 @@ Create and connect to a AWS EC2 instance made simple
 
 ## Prerequisites
 * Docker installed
-* AWS account with an user with these permissions:
+* AWS user with these permissions:
   * `AmazonEC2FullAccess`
   * `SecurityAudit`
-* Export credentials like this:
-  * `export AWS_ACCESS_KEY_ID=...`
-  * `export AWS_SECRET_ACCESS_KEY=...`
 * Additional configurations can be made in the `group_vars/all` file
 
 ## Create EC2 instance
 
+Export AWS user credentials like this:
+  * `export AWS_ACCESS_KEY_ID=...`
+  * `export AWS_SECRET_ACCESS_KEY=...`
+
+And execute following statement:
 ```
 docker run -it --rm --name ec2-deployment \
 -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
@@ -26,4 +28,4 @@ look up the public ip in the `hosts` file underneath `[webservers]` block and pa
 
 
 ## Delete EC2 instance
-Uncomment the `FOR DELETION ONLY` block in the `group_vars/all` file
+Uncomment the `FOR DELETION ONLY` block in the `group_vars/all` file and enter the correct ec2 instance id
