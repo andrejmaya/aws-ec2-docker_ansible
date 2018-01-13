@@ -1,23 +1,27 @@
 - name: Check whether the private_key_backup exists
   stat:
-    path: ./ec2.id_rsa
+    path: "{{ ec2_basic.keys_dir }}/{{ key_name }}.pub"
   register: ec2_key
+  when: ec2_basic.state == "present"
 
 - name: generate public key
-  shell: "ssh-keygen -N '' -C 'ansible@localhost' -f ./ec2.id_rsa -q"
-  when: ec2_key.stat.exists == false
+  shell: "ssh-keygen -N '' -C 'ansible@localhost' -f {{ ec2_basic.keys_dir }}/{{ key_name }} -q"
+  when: ec2_basic.state == "present" and ec2_key.stat.exists == false
 
 - name: Manager SSH Key pair
   ec2_key:
-    name: ansible-keypair
+    name: "ansible-keypair-{{ key_name }}"
+    state: "{{ec2_basic.state}}"
     key_material: "{{ item }}"
     region: "{{ region }}"    
-  with_file: ./ec2.id_rsa.pub
+  with_file: "{{ ec2_basic.keys_dir }}/{{ key_name }}.pub"
 
 - name: Create a security group
   ec2_group:
     name: "{{ security_group }}"
     description: Security Group for ansible ec2 instances
+    # cannot delete here, since its dependetend from the instances below
+    # state: "{{ec2_basic.state}}"
     region: "{{ region }}"
     rules:
       - proto: tcp
@@ -29,6 +33,10 @@
         to_port: 80
         cidr_ip: 0.0.0.0/0
       - proto: tcp
+        from_port: 8080
+        to_port: 8080
+        cidr_ip: 0.0.0.0/0        
+      - proto: tcp
         from_port: 443
         to_port: 443
         cidr_ip: 0.0.0.0/0
@@ -37,24 +45,18 @@
         cidr_ip: 0.0.0.0/0
   register: basic_firewall
 
-- ec2_ami_find:
-    name: "{{ image_name }}"
-    region: "{{ region }}"
-    sort: name
-    sort_order: descending
-    sort_end: 1
-  register: ami_find
-
 - name: Manage EC2 Instance
   ec2: 
-    id: "{{ec2_idempotent_id}}"
+    id: "ansible-keypair-{{ key_name }}"
     instance_ids: "{{ec2_basic.instance_ids}}"
     group: "{{ security_group }}"
     instance_type: "{{ instance_type }}"
-    image: "{{ ami_find.results[0].ami_id }}"
+    instance_tags:
+      Name: "{{ key_name }}"    
+    image: "{{ ami_id }}"
     wait: true 
     region: "{{ region }}"
-    keypair: ansible-keypair
+    keypair: "ansible-keypair-{{ key_name }}"
     count: "{{count}}"
     state: "{{ec2_basic.state}}"
   register: ec2
@@ -76,15 +78,4 @@
                 port=22 
                 state=started
   with_items: "{{ec2.instances}}"
-  when: ec2_basic.state == "present"
-
-- name: Add tag to Instance(s)
-  ec2_tag: 
-    resource: "{{ item.id }}" 
-    region: "{{ region }}" 
-    state: present
-  with_items: "{{ec2.instances}}"
-  args:
-    tags:
-      Name: playground
-  when: ec2_basic.state == "present"      
+  when: ec2_basic.state == "present"    

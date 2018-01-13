@@ -1,11 +1,12 @@
 instance_type: t2.micro
 security_group: default_ansible
-image_name: ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*
+ami_id: ami-af79ebc0
 region: eu-central-1
 count: 1
-ec2_idempotent_id: 20180105_1
+key_name: ec2.id_rsa
 
 #FOR DELETION ONLY
 #state: absent
 #instance_ids:
-#- 'i-06da6696fcfc14383'
+#- 'i-0f86debe3aed8013d'
+#- 'i-095a62f1a497d3a8f'
