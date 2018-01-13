@@ -17,6 +17,7 @@
 - name: Create a security group
   ec2_group:
     name: "{{ security_group }}"
+    description: Security Group for ansible ec2 instances
     region: "{{ region }}"
     rules:
       - proto: tcp
