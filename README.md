@@ -6,7 +6,9 @@ Create and connect to a AWS EC2 instance made simple
 * AWS user with these permissions:
   * `AmazonEC2FullAccess`
   * `SecurityAudit`
-* Additional configurations can be made in the `group_vars/all` file
+* Additional configurations can be made in the `group_vars/all` file:
+  * RHEL AMI: `ami-194cdc76`
+  * Ubuntu ami: `ami-af79ebc0`  
 
 ## Create EC2 instance
 
@@ -37,3 +39,6 @@ look up the public ip in the `hosts` file underneath `[playground]` block and pa
 
 ## Delete EC2 instance
 Uncomment the `FOR DELETION ONLY` block in the `group_vars/all` file and enter the correct ec2 instance id
+
+## Known issues
+* `IdempotentInstanceTerminated: The client token you have provided is associated with a terminated instance. Please use a different client token`: Please change the `key_name` variable in `group_vars/all` to create a new instance(s)

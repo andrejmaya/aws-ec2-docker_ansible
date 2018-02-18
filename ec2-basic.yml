@@ -4,4 +4,10 @@
     connection: local
     gather_facts: False
     roles:
-    - { role: ec2_basic, tags: basic}  
+    - { role: ec2_basic, tags: basic}
+
+  - name: Install Docker-CE
+    hosts: playground
+    become: yes
+    roles:
+    - { role: docker, tags: docker}    

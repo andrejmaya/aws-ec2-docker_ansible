@@ -1,12 +1,18 @@
 instance_type: t2.micro
 security_group: default_ansible
-ami_id: ami-af79ebc0
-region: eu-central-1
+#west-rhel: ami-77a2a317
+#west-ubuntu: ami-07585467
+#eu-ubuntu: ami-af79ebc0
+ami_id: ami-974048f7
+region: us-west-1 #eu-central-1
 count: 1
-key_name: ec2.id_rsa
+key_name: ec2.id_rsa_20180218_ubuntu
 
 #FOR DELETION ONLY
 #state: absent
 #instance_ids:
-#- 'i-0f86debe3aed8013d'
+#- 'i-033fbb3d7faabba8d'
 #- 'i-095a62f1a497d3a8f'
+
+ansible_ssh_private_key_file: deploy_keys/ec2.id_rsa_20180218_ubuntu
+ansible_ssh_user: ubuntu
