@@ -10,6 +10,8 @@
 
 - name: Manager SSH Key pair
   ec2_key:
+    aws_access_key: "{{ec2_access_key}}"
+    aws_secret_key: "{{ec2_secret_key}}"  
     name: "ansible-keypair-{{ key_name }}"
     state: "{{ec2_basic.state}}"
     key_material: "{{ item }}"
@@ -18,6 +20,8 @@
 
 - name: Create a security group
   ec2_group:
+    aws_access_key: "{{ec2_access_key}}"
+    aws_secret_key: "{{ec2_secret_key}}"  
     name: "{{ security_group }}"
     description: Security Group for ansible ec2 instances
     # cannot delete here, since its dependetend from the instances below
@@ -47,8 +51,10 @@
 
 - name: Manage EC2 Instance
   ec2: 
+    aws_access_key: "{{ec2_access_key}}"
+    aws_secret_key: "{{ec2_secret_key}}"  
     id: "ansible-keypair-{{ key_name }}"
-    instance_ids: "{{ec2_basic.instance_ids}}"
+    instance_ids: "{{ec2_basic.instance_ids.split(',')}}"
     group: "{{ security_group }}"
     instance_type: "{{ instance_type }}"
     instance_tags:
@@ -63,7 +69,7 @@
 
 - name: Add the newly created EC2 instance(s) to the local host group (located inside the directory)
   lineinfile:
-    dest: "./hosts" 
+    dest: "./inventory" 
     regexp: "{{ item.public_ip }}"
     insertafter: "[playground]" 
     line: "{{ item.public_ip }}"

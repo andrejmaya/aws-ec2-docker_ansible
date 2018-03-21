@@ -1,4 +1,4 @@
 ec2_basic:
   state: "{{state | default('present')}}"
-  instance_ids: "{{ instance_ids | default([])}}"
+  instance_ids: "{{ instance_ids | default(',')}}"
   keys_dir: "deploy_keys"  
