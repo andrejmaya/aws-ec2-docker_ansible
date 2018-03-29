@@ -85,3 +85,8 @@
                 state=started
   with_items: "{{ec2.instances}}"
   when: ec2_basic.state == "present"    
+
+- name: Print pulic IP
+  debug:
+    msg: "Public IP: {{item.public_ip}}"
+  with_items: "{{ec2.instances}}"    

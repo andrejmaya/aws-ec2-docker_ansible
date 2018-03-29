@@ -4,22 +4,18 @@ ec2_access_key="YOUR_AWS_ACCESS_KEY_ID"
 ec2_secret_key="YOUR_AWS_SECRET_ACCESS_KEY"
 
 #name of the ssh key, which will be created
-key_name=ec2.id_rsa_20180321
-ansible_ssh_private_key_file=deploy_keys/ec2.id_rsa_20180321
+key_name=ec2.id_rsa
+ansible_ssh_private_key_file=deploy_keys/ec2.id_rsa
+#ubuntu, ec2-user
 ansible_ssh_user=ubuntu
 
 
 instance_type=t2.micro
 security_group=default_ansible
-# choose one ami, e.g.
-# - west-rhel: ami-77a2a317
-# - west-ubuntu: ami-07585467
-# - eu-ubuntu: ami-af79ebc0
+# choose one ami, e.g. ami-af79ebc0 (ubuntu@eu-central-1), ami-194cdc76 (rhel@eu-central-1)
 ami_id=ami-af79ebc0
 
-# choose a region, e.g.
-# - us-west-1 
-# - eu-central-1
+# choose a region, e.g. us-west-1, eu-central-1
 region=eu-central-1
 count=1
 

@@ -19,7 +19,7 @@ ec2_secret_key="YOUR_AWS_SECRET_ACCESS_KEY"
 And execute following statement:
 ```
 docker run -it --rm -v $(pwd):/ansible \
-ryanwalls/ansible-aws sh -c "ansible-playbook -i ./inventory ec2-basic.yml"
+ryanwalls/ansible-aws:v2.3.1.0-1 sh -c "ansible-playbook -i ./inventory ec2-basic.yml"
 ```
 
 ## Multiple instances per user
@@ -34,7 +34,7 @@ ryanwalls/ansible-aws sh -c "ansible-playbook -i ./inventory ec2-basic.yml"
 ## SSH connection
 look up the public ip in the `inventory` file underneath `[playground]` block and pass it to:
 
-`ssh -i ./deploy_keys/<key_name> ubuntu@<PUBLIC_IP>`
+`ssh -i ./deploy_keys/<key_name> <ansible_ssh_user>@<PUBLIC_IP>`
 
 
 ## Delete EC2 instance
